@@ -1,0 +1,7 @@
+{
+  "name": "Plugin Template",
+  "description": "Plugin template",
+  "author": "QinomeD",
+  "homepage": "",
+  "pluginClass": "qinomed.crystalplugin.Main"
+}
