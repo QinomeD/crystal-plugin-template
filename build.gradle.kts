@@ -18,15 +18,18 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-tasks.register("runLauncher") {
-    copy {
-        from(tasks.jar)
-        into("${launcherPath}plugins")
-    }
-    project.exec {
-        commandLine("${launcherPath}launcher.exe")
-    }
+task<Copy>("copyToPlugins") {
+    from(tasks.jar.map { it.archiveFile })
+    into("${launcherPath}plugins")
 }
+
+task("runLauncher", JavaExec::class) {
+    workingDir(file(launcherPath))
+
+    classpath = files("${launcherPath}launcherLibraries/*")
+    jvmArgs("-Dnetbeans.debug=true")
+    mainClass.set("ovh.crystallauncher.crystal.Bootstrap")
+}.dependsOn(tasks.getByName("copyToPlugins"))
 
 tasks.jar {
     from("$resources")
